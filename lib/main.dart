@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:indagram/firebase_options.dart';
 import 'package:indagram/providers/internet_provider.dart';
 import 'package:indagram/providers/sign_in_provider.dart';
 import 'package:indagram/screens/login_page.dart';
@@ -7,7 +8,9 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 

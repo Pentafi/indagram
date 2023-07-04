@@ -69,7 +69,7 @@ class SignInProvider with ChangeNotifier {
         final User? user = userCredential.user;
         if (user != null) {
           _isSignedIn = true;
-          _provider = 'google.com';
+          _provider = 'GOOGLE';
           _uid = user.uid;
           _name = user.displayName;
           _email = user.email;
