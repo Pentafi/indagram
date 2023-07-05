@@ -16,8 +16,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final RoundedLoadingButtonController googleController =
       RoundedLoadingButtonController();
-  final RoundedLoadingButtonController facebookController =
-      RoundedLoadingButtonController();
 
   @override
   Widget build(BuildContext context) {
@@ -87,35 +85,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 10),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                RoundedLoadingButton(
-                  onPressed: handleFacebookAuth,
-                  controller: facebookController,
-                  successColor: Colors.blue,
-                  child: const Wrap(
-                    children: [
-                      Icon(
-                        FontAwesomeIcons.facebook,
-                        size: 20,
-                        color: Colors.blue,
-                      ),
-                      SizedBox(width: 15),
-                      Text(
-                        "Facebook",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
           ],
         ),
       ),
@@ -158,53 +127,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> handleUserExists(bool userExists) async {
-    final sp = context.read<SignInProvider>();
-    if (userExists) {
-      // user exists
-      await sp.getUserDataFromFirestore(sp.uid);
-    } else {
-      // user does not exist
-      await sp.saveDataToFirestore();
-    }
-    await sp.saveDataToSharedPreferences();
-  }
-
-  Future<void> handleFacebookAuth() async {
-    final sp = context.read<SignInProvider>();
-    final ip = context.read<InternetProvider>();
-    await ip.checkInternetConnection();
-
-    if (ip.hasInternet == false) {
-      handleNoInternetConnectionFacebook();
-      return;
-    }
-
-    await sp.signInWithFacebook();
-
-    if (sp.hasError == true) {
-      handleSignInErrorFacebook(sp.errorCode.toString());
-      return;
-    }
-
-    // checking whether user exists or not
-    final userExists = await sp.checkUserExists();
-    handleUserExistsFacebook(userExists);
-
-    await sp.setSignIn();
-    facebookController.success();
-  }
-
-  void handleNoInternetConnectionFacebook() {
-    openSnackbar(context, "Check your Internet connection", Colors.red);
-    facebookController.reset();
-  }
-
-  void handleSignInErrorFacebook(String errorCode) {
-    openSnackbar(context, errorCode, Colors.red);
-    facebookController.reset();
-  }
-
-  Future<void> handleUserExistsFacebook(bool userExists) async {
     final sp = context.read<SignInProvider>();
     if (userExists) {
       // user exists
