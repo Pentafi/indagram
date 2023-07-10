@@ -3,8 +3,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:indagram/state/posts/providers/posts_by_search_term_provider.dart';
 import 'package:indagram/views/components/animations/empty_contents_with_text_animation_view.dart';
 import 'package:indagram/views/components/animations/error_animation_view.dart';
-import 'package:indagram/views/components/post/post_grid_view.dart';
+import 'package:indagram/views/components/animations/models/data_not_found_animation_view.dart';
+import 'package:indagram/views/components/post/posts_sliver_grid_view.dart';
 import 'package:indagram/views/constants/strings.dart';
+
 
 class SearchGridView extends ConsumerWidget {
   final String searchTerm;
@@ -33,11 +35,11 @@ class SearchGridView extends ConsumerWidget {
     return posts.when(
       data: (posts) {
         if (posts.isEmpty) {
-          return const EmptyContentsWithTextAnimationView(
-            text: Strings.noPostsAvailable,
-            );
+          return const SliverToBoxAdapter(
+            child: DataNotFoundAnimationView(),
+          );
         } else {
-          return PostsGridView(
+          return PostsSliverGridView(
             posts: posts,
           );
         }
